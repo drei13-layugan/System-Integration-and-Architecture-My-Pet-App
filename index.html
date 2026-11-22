@@ -2,12 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pet-directory</title>
+    <title>Canine Breed Directory</title>
   </head>
   <body>
-    <div id="app"></div>
+    <header class="site-header">
+      <div class="container">
+        <h1>Canine Breed Directory</h1>
+        <p class="subtitle">A reference catalogue of dog breeds with photographs.</p>
+      </div>
+    </header>
+
+    <main class="container layout">
+      <section class="panel" aria-labelledby="browse-heading">
+        <h2 id="browse-heading">Browse breeds</h2>
+
+        <div class="controls">
+          <label for="search">Search</label>
+          <input id="search" type="search" placeholder="e.g. retriever" autocomplete="off" />
+
+          <label class="checkbox">
+            <input id="favorites-only" type="checkbox" />
+            Show saved breeds only
+          </label>
+        </div>
+
+        <p id="count" class="meta" aria-live="polite"></p>
+        <p id="list-error" class="notice error" role="alert" hidden></p>
+        <ul id="breed-list" class="breed-list" aria-label="Breeds"></ul>
+      </section>
+
+      <section id="detail" class="panel" tabindex="-1" aria-labelledby="detail-heading" aria-live="polite">
+        <h2 id="detail-heading">Breed details</h2>
+        <div id="detail-body">
+          <p class="meta">Select a breed from the list to view photographs.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="container site-footer">
+      <p>Photographs provided by the free <a href="https://dog.ceo/dog-api/" rel="noreferrer">Dog CEO API</a>.</p>
+    </footer>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
