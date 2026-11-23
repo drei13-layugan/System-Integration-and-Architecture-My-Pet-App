@@ -10,6 +10,7 @@ function $<T extends HTMLElement>(id: string): T {
 const countText = $<HTMLParagraphElement>("count");
 const listError = $<HTMLParagraphElement>("list-error");
 const listEl = $<HTMLUListElement>("breed-list");
+const searchInput = $<HTMLInputElement>("search");
 
 let breeds: Breed[] = [];
 
@@ -25,10 +26,16 @@ function el<K extends keyof HTMLElementTagNameMap>(
   return node;
 }
 
+function visibleBreeds(): Breed[] {
+  const query = searchInput.value.trim().toLowerCase();
+  return breeds.filter((b) => query === "" || b.name.toLowerCase().includes(query));
+}
+
 function renderList(): void {
+  const items = visibleBreeds();
   listEl.replaceChildren();
 
-  for (const breed of breeds) {
+  for (const breed of items) {
     const li = el("li");
     const button = el("button", "breed-button", breed.name);
     button.type = "button";
@@ -36,7 +43,10 @@ function renderList(): void {
     listEl.append(li);
   }
 
-  countText.textContent = `Showing ${breeds.length} of ${breeds.length} breeds.`;
+  countText.textContent =
+    items.length === 0
+      ? "No breeds match your search."
+      : `Showing ${items.length} of ${breeds.length} breeds.`;
 }
 
 async function init(): Promise<void> {
@@ -54,4 +64,5 @@ async function init(): Promise<void> {
   }
 }
 
+searchInput.addEventListener("input", renderList);
 void init();
