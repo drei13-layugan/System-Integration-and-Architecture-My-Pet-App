@@ -43,3 +43,6 @@ export async function fetchBreeds(): Promise<Breed[]> {
 
   return breeds.sort((a, b) => a.name.localeCompare(b.name));
 }
+export function fetchPhotos(breedId: string, count = 6): Promise<string[]> {
+  return getJSON<string[]>(`${API}/breed/${breedId}/images/random/${count}`);
+}

@@ -1,5 +1,5 @@
 import "./style.css";
-import { fetchBreeds, type Breed } from "./api.ts";
+import { fetchBreeds, fetchPhotos, type Breed } from "./api.ts";
 
 function $<T extends HTMLElement>(id: string): T {
   const el = document.getElementById(id);
@@ -13,6 +13,9 @@ const listEl = $<HTMLUListElement>("breed-list");
 const searchInput = $<HTMLInputElement>("search");
 
 let breeds: Breed[] = [];
+
+const detailBody = $<HTMLDivElement>("detail-body");
+let selectedId: string | null = null;
 
 
 function el<K extends keyof HTMLElementTagNameMap>(
@@ -39,6 +42,8 @@ function renderList(): void {
     const li = el("li");
     const button = el("button", "breed-button", breed.name);
     button.type = "button";
+    button.setAttribute("aria-pressed", String(breed.id === selectedId));
+    button.addEventListener("click", () => void selectBreed(breed));
     li.append(button);
     listEl.append(li);
   }
