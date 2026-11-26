@@ -53,6 +53,41 @@ function renderList(): void {
       ? "No breeds match your search."
       : `Showing ${items.length} of ${breeds.length} breeds.`;
 }
+function renderDetailShell(breed: Breed): { gallery: HTMLDivElement } {
+  const title = el("h3", "breed-title", breed.name);
+
+  const refresh = el("button", "secondary", "Load different photographs");
+  refresh.type = "button";
+  refresh.addEventListener("click", () => void selectBreed(breed));
+
+  const actions = el("div", "actions");
+  actions.append(refresh);
+
+  const gallery = el("div", "gallery");
+  detailBody.replaceChildren(title, actions, gallery);
+  return { gallery };
+}
+
+async function selectBreed(breed: Breed): Promise<void> {
+  selectedId = breed.id;
+  renderList();
+
+  const { gallery } = renderDetailShell(breed);
+  gallery.append(el("p", "meta", "Loading photographs…"));
+
+  const photos = await fetchPhotos(breed.id);
+
+  gallery.replaceChildren();
+  for (const url of photos) {
+    const figure = el("figure");
+    const img = el("img");
+    img.src = url;
+    img.alt = `Photograph of a ${breed.name.toLowerCase()}`;
+    img.loading = "lazy";
+    figure.append(img);
+    gallery.append(figure);
+  }
+}
 
 async function init(): Promise<void> {
   countText.textContent = "Loading breeds…";
